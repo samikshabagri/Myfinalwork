@@ -1,0 +1,63 @@
+{
+  "b67f7d5d14d46d9e7e133b41fa90d40f": {
+    "id": "b67f7d5d14d46d9e7e133b41fa90d40f",
+    "filename": "Maritime_Virtual_Assistant_Test_Pack (1).pdf",
+    "file_type": "pdf",
+    "upload_date": "2025-08-30T20:45:30.235729",
+    "text_length": 7166,
+    "chunk_count": 10
+  },
+  "52090741afcbb32dbe4bf5b0c6623044": {
+    "id": "52090741afcbb32dbe4bf5b0c6623044",
+    "filename": "Maritime_Virtual_Assistant_Test_Pack (1).pdf",
+    "file_type": "pdf",
+    "upload_date": "2025-08-30T20:45:37.793804",
+    "text_length": 7166,
+    "chunk_count": 10
+  },
+  "77976b6fef2bb96393f51958384552d5": {
+    "id": "77976b6fef2bb96393f51958384552d5",
+    "filename": "CP_Excerpt_Test.pdf",
+    "file_type": "pdf",
+    "upload_date": "2025-08-30T21:26:49.046511",
+    "processing_method": "fallback_basic",
+    "text_length": 204,
+    "chunk_count": 1
+  },
+  "558abf0c2309de6469708e5ba13aca8b": {
+    "id": "558abf0c2309de6469708e5ba13aca8b",
+    "filename": "Maritime_Virtual_Assistant_Test_Pack (1).pdf",
+    "file_type": "pdf",
+    "upload_date": "2025-08-30T21:42:48.899886",
+    "processing_method": "llamaindex_rag_only",
+    "llamaindex_processed": true,
+    "llamaindex_files": [
+      "C:\\Users\\akash\\OneDrive - Axess Corrosion\\Desktop\\hacksami\\Hackathon_\\app\\app\\storage\\uploads\\tmpuivycz2o.pdf"
+    ],
+    "file_size": 12310
+  },
+  "aa13fff5629cde7f5d59337ce4684a17": {
+    "id": "aa13fff5629cde7f5d59337ce4684a17",
+    "filename": "Maritime_Virtual_Assistant_Test_Pack (1).pdf",
+    "file_type": "pdf",
+    "upload_date": "2025-08-30T21:43:22.680006",
+    "processing_method": "llamaindex_rag_only",
+    "llamaindex_processed": true,
+    "llamaindex_files": [
+      "C:\\Users\\akash\\OneDrive - Axess Corrosion\\Desktop\\hacksami\\Hackathon_\\app\\app\\storage\\uploads\\tmpxupja_bz.pdf"
+    ],
+    "file_size": 12310
+  },
+  "ec0c504470a3c379297a2a7e5f7ce798": {
+    "id": "ec0c504470a3c379297a2a7e5f7ce798",
+    "filename": "Maritime_Virtual_Assistant_Test_Pack (1).pdf",
+    "file_type": "pdf",
+    "upload_date": "2025-08-30T21:43:52.133037",
+    "processing_method": "llamaindex_rag_only",
+    "llamaindex_processed": true,
+    "llamaindex_files": [
+      "C:\\Users\\akash\\OneDrive - Axess Corrosion\\Desktop\\hacksami\\Hackathon_\\app\\app\\storage\\uploads\\tmp7lphitbj.pdf"
+    ],
+    "file_size": 12310
+  }
+}

@@ -1,0 +1,779 @@
+# 🚢 Maritime AI Agent - Intelligent Maritime Operations Assistant
+
+## 📋 Table of Contents
+- [Overview](#overview)
+- [Core Expectations Fulfilled](#core-expectations-fulfilled)
+- [AI Assistant Behaviors](#ai-assistant-behaviors)
+- [How It Works](#how-it-works)
+- [Code Logic Explained](#code-logic-explained)
+- [File Structure](#file-structure)
+- [Installation & Setup](#installation--setup)
+- [How to Run](#how-to-run)
+- [Usage Examples](#usage-examples)
+- [Troubleshooting](#troubleshooting)
+
+## 🎯 Overview
+
+The **Maritime AI Agent** is a smart assistant that helps with maritime operations. Think of it as a very intelligent shipping expert that can:
+- Plan the best routes for ships
+- Match ships with cargo
+- Analyze market trends
+- Calculate costs
+- Answer questions in natural language
+
+### 🧠 What Makes It Smart
+- **Natural Language Understanding**: You can ask questions like "Plan a voyage for vessel 9700001 from Brazil to China"
+- **Data Analysis**: It reads your maritime data files and finds patterns
+- **Optimization**: It finds the best options for maximum profit
+- **Conversational**: You can chat with it like talking to a human expert
+
+## ✅ Core Expectations Fulfilled
+
+### 1. 🗺️ Smart Voyage Planning & Optimization
+
+**✅ What We Deliver:**
+- **Optimal Route Suggestions**: Our `VoyagePlanner` calculates routes considering:
+  - Distance and fuel consumption
+  - Canal fees (Suez, Panama)
+  - Piracy risk zones
+  - Weather considerations
+  - Current market conditions
+
+**✅ "What-If" Scenarios:**
+- **Speed Optimization**: Compare slow steaming vs. higher speed
+- **Route Comparison**: Suez vs. Cape vs. Panama routes
+- **Bunker Price Impact**: How fuel price changes affect total costs
+- **Cost-Benefit Analysis**: Trade-offs between time and money
+
+**🔧 How It Works:**
+```python
+# In voyage_planner.py
+def compare_routes(self, vessel_imo, load_port, disch_port):
+    routes = []
+    for route_type in ['SUEZ', 'CAPE', 'PANAMA', 'DIRECT']:
+        cost = calculate_route_cost(route_type)
+        time = calculate_route_time(route_type)
+        fuel = calculate_fuel_consumption(route_type)
+        routes.append({
+            'route': route_type,
+            'total_cost': cost,
+            'voyage_days': time,
+            'fuel_cost': fuel,
+            'tce_analysis': calculate_tce(cost, time)
+        })
+    return routes
+```
+
+### 2. 📦 Cargo & Tonnage Matching Assistant
+
+**✅ What We Deliver:**
+- **Proactive Cargo-Ship Pairings**: Our `CargoMatcher` automatically finds:
+  - Best vessel-cargo combinations based on DWT compatibility
+  - Laycan timing analysis
+  - Profitability estimates (TCE calculations)
+  - Real-time matching like a digital chartering assistant
+
+**✅ Profitability Estimates:**
+- **TCE Calculations**: Time Charter Equivalent for each match
+- **Cost-Benefit Analysis**: Ballast distance vs. freight revenue
+- **Market Benchmarking**: Compare against current market rates
+
+**🔧 How It Works:**
+```python
+# In cargo_matcher.py
+def get_optimal_matches(self, min_tce_usd_per_day=5000):
+    matches = []
+    for vessel in self.vessels:
+        for cargo in self.cargos:
+            if self.is_compatible(vessel, cargo):
+                tce = self.calculate_tce(vessel, cargo)
+                if tce >= min_tce_usd_per_day:
+                    matches.append({
+                        'vessel': vessel,
+                        'cargo': cargo,
+                        'tce_usd_per_day': tce,
+                        'profitability_score': self.calculate_profitability(vessel, cargo)
+                    })
+    return sorted(matches, key=lambda x: x['tce_usd_per_day'], reverse=True)
+```
+
+### 3. 📊 Market & Commercial Insights
+
+**✅ What We Deliver:**
+- **Market Trend Analysis**: Our `MarketInsights` provides:
+  - Freight rate trends and BDI movements
+  - Bunker price analysis and forecasts
+  - Supply/demand imbalance indicators
+  - Market sentiment analysis
+
+**✅ Voyage Benchmarking:**
+- **Performance Comparison**: Compare your voyage against market averages
+- **Cost Analysis**: How your costs compare to industry standards
+- **Profitability Metrics**: TCE vs. market benchmarks
+
+**🔧 How It Works:**
+```python
+# In market_insights.py
+def benchmark_voyage_performance(self, vessel_imo, load_port, disch_port):
+    your_voyage = self.calculate_voyage_metrics(vessel_imo, load_port, disch_port)
+    market_average = self.get_market_averages(vessel_type, route)
+    
+    return {
+        'your_tce': your_voyage['tce'],
+        'market_average_tce': market_average['tce'],
+        'performance_ratio': your_voyage['tce'] / market_average['tce'],
+        'cost_efficiency': your_voyage['cost_per_mt'] / market_average['cost_per_mt'],
+        'recommendations': self.generate_recommendations(your_voyage, market_average)
+    }
+```
+
+### 4. 🏢 Port & Cargo Intelligence
+
+**✅ What We Deliver:**
+- **Bunker Port Optimization**: Our `PDACalculator` finds:
+  - Cheapest bunker ports en route
+  - Fastest bunkering options
+  - Cost-benefit analysis of different bunker locations
+  - Real-time price comparisons
+
+**🔧 How It Works:**
+```python
+# In pda_calculator.py
+def compare_bunker_ports(self, voyage_plan, candidate_ports):
+    comparisons = []
+    for port in candidate_ports:
+        bunker_cost = self.calculate_bunker_cost(port, voyage_plan['fuel_needed'])
+        deviation_cost = self.calculate_deviation_cost(voyage_plan, port)
+        total_cost = bunker_cost + deviation_cost
+        
+        comparisons.append({
+            'port': port,
+            'bunker_price_usd_per_mt': self.get_bunker_price(port),
+            'total_cost_usd': total_cost,
+            'deviation_distance_nm': self.calculate_deviation_distance(voyage_plan, port),
+            'savings_vs_load_port': self.calculate_savings(port, voyage_plan['load_port'])
+        })
+    return sorted(comparisons, key=lambda x: x['total_cost_usd'])
+```
+
+### 5. 💰 Automated PDA & Cost Management
+
+**✅ What We Deliver:**
+- **Auto-PDA Calculations**: Our `PDACalculator` automatically computes:
+  - Port charges (load and discharge)
+  - Canal fees (Suez, Panama)
+  - Agency costs and commissions
+  - Bunker costs and consumption
+  - Additional voyage expenses
+
+**✅ Cost Tracking:**
+- **Estimated vs. Actual**: Compare planned vs. actual costs
+- **Variance Analysis**: Identify cost overruns and savings
+- **Budget Monitoring**: Real-time cost tracking
+
+**🔧 How It Works:**
+```python
+# In pda_calculator.py
+def calculate_pda(self, voyage_plan, bunker_port=None, fuel_type="VLSFO"):
+    pda_breakdown = {
+        'load_port_fees': self.calculate_port_fees(voyage_plan['load_port']),
+        'disch_port_fees': self.calculate_port_fees(voyage_plan['disch_port']),
+        'bunker_costs': self.calculate_bunker_costs(voyage_plan, bunker_port, fuel_type),
+        'canal_costs': self.calculate_canal_costs(voyage_plan),
+        'additional_costs': self.calculate_additional_costs(voyage_plan)
+    }
+    
+    total_pda = sum([cost['total'] for cost in pda_breakdown.values()])
+    
+    return {
+        'total_pda_usd': total_pda,
+        'breakdown': pda_breakdown,
+        'budget_analysis': self.analyze_budget(total_pda, voyage_plan['freight_revenue'])
+    }
+```
+
+## 🤖 AI Assistant Behaviors
+
+### 1. 💬 Conversational Querying
+
+**✅ What We Deliver:**
+Instead of filling multiple forms, you can simply ask:
+- "Plan a voyage for a Panamax from Santos to Qingdao with a 15-day laycan, compare via Suez vs Cape, give bunker costs at current VLSFO prices."
+
+**🔧 How It Works:**
+```python
+# In simple_working_chatbot.py
+def handle_query(self, query):
+    # 1. Understand what user wants
+    intent = self._determine_intent(query)  # "voyage_planning"
+    
+    # 2. Extract important information
+    data = self._extract_data_from_query(query)
+    # Extracts: vessel_type="Panamax", load_port="Santos", 
+    # disch_port="Qingdao", laycan_days=15, route_comparison=True
+    
+    # 3. Execute the action
+    result = self._execute_action(intent, data)
+    
+    # 4. Format response
+    return self._format_response(result)
+```
+
+**✅ Complex Query Processing:**
+- **Multi-Intent Recognition**: Understands complex requests with multiple requirements
+- **Parameter Extraction**: Automatically finds vessel types, ports, dates, etc.
+- **Context Awareness**: Remembers previous queries and provides relevant suggestions
+
+### 2. 🚨 Proactive Alerts
+
+**✅ What We Deliver:**
+- **Weather Alerts**: "Storm forecast in Bay of Biscay may delay your vessel ETA by 36 hrs."
+- **Market Alerts**: "Baltic Dry Index up 5% today – consider fixing sooner."
+- **Cost Alerts**: "Bunker prices increased 10% in Singapore – consider alternative ports."
+
+**🔧 How It Works:**
+```python
+# In market_insights.py
+def generate_proactive_alerts(self):
+    alerts = []
+    
+    # Weather alerts
+    weather_data = self.get_weather_forecast()
+    for vessel in self.tracked_vessels:
+        if self.is_in_storm_zone(vessel, weather_data):
+            delay = self.calculate_delay(vessel, weather_data)
+            alerts.append(f"Storm forecast may delay {vessel['name']} ETA by {delay} hours")
+    
+    # Market alerts
+    bdi_change = self.get_bdi_change()
+    if abs(bdi_change) > 3:  # 3% threshold
+        direction = "up" if bdi_change > 0 else "down"
+        alerts.append(f"BDI {direction} {abs(bdi_change)}% today - consider fixing {'sooner' if bdi_change > 0 else 'later'}")
+    
+    return alerts
+```
+
+### 3. 🔗 Integration & Automation
+
+**✅ What We Deliver:**
+- **Data Integration**: Pulls data from multiple sources:
+  - AIS vessel tracking
+  - Bunker price indices
+  - Weather feeds
+  - Market data sources
+- **Automated Reports**: Generate ready-to-share reports for management or charterers
+
+**🔧 How It Works:**
+```python
+# In data_loader.py
+def load_real_time_data(self):
+    # AIS Integration
+    ais_data = self.fetch_ais_data()
+    
+    # Bunker Price Integration
+    bunker_prices = self.fetch_bunker_prices()
+    
+    # Weather Integration
+    weather_data = self.fetch_weather_data()
+    
+    # Market Data Integration
+    market_data = self.fetch_market_data()
+    
+    return {
+        'ais': ais_data,
+        'bunker': bunker_prices,
+        'weather': weather_data,
+        'market': market_data
+    }
+
+# In report_generator.py
+def generate_voyage_report(self, voyage_data):
+    report = {
+        'executive_summary': self.create_executive_summary(voyage_data),
+        'cost_breakdown': self.create_cost_breakdown(voyage_data),
+        'market_analysis': self.create_market_analysis(voyage_data),
+        'recommendations': self.create_recommendations(voyage_data),
+        'charts': self.create_charts(voyage_data)
+    }
+    return self.format_report(report)
+```
+
+### 4. 🎯 Decision Support
+
+**✅ What We Deliver:**
+- **Ranked Options**: Show best options ranked by TCE, fuel cost, emissions
+- **Trade-off Analysis**: Clear explanations of pros and cons
+- **Decision Matrix**: "Route A saves $120k fuel but adds 3 days. Route B is faster but 25% more emissions."
+
+**🔧 How It Works:**
+```python
+# In decision_support.py
+def analyze_route_options(self, vessel_imo, load_port, disch_port):
+    routes = self.voyage_planner.compare_routes(vessel_imo, load_port, disch_port)
+    
+    for route in routes:
+        # Calculate multiple metrics
+        route['tce_ranking'] = self.calculate_tce_ranking(route)
+        route['fuel_efficiency'] = self.calculate_fuel_efficiency(route)
+        route['emissions'] = self.calculate_emissions(route)
+        route['risk_score'] = self.calculate_risk_score(route)
+        
+        # Generate trade-off analysis
+        route['trade_offs'] = self.generate_trade_offs(route)
+    
+    # Rank by different criteria
+    ranked_by_tce = sorted(routes, key=lambda x: x['tce_analysis']['tce_usd_per_day'], reverse=True)
+    ranked_by_fuel = sorted(routes, key=lambda x: x['fuel_cost_usd'])
+    ranked_by_emissions = sorted(routes, key=lambda x: x['emissions']['co2_tons'])
+    
+    return {
+        'options': routes,
+        'rankings': {
+            'by_tce': ranked_by_tce,
+            'by_fuel': ranked_by_fuel,
+            'by_emissions': ranked_by_emissions
+        },
+        'recommendations': self.generate_recommendations(routes)
+    }
+
+def generate_trade_offs(self, route):
+    trade_offs = []
+    
+    # Compare with other routes
+    for other_route in self.all_routes:
+        if other_route != route:
+            fuel_savings = other_route['fuel_cost_usd'] - route['fuel_cost_usd']
+            time_difference = route['total_voyage_days'] - other_route['total_voyage_days']
+            
+            if abs(fuel_savings) > 50000:  # Significant difference
+                trade_offs.append({
+                    'type': 'fuel_vs_time',
+                    'description': f"Route saves ${fuel_savings:,.0f} fuel but adds {time_difference:.1f} days",
+                    'impact': 'high' if abs(fuel_savings) > 100000 else 'medium'
+                })
+    
+    return trade_offs
+```
+
+## 🔍 How It Works
+
+### The Big Picture
+```
+User asks question → Chatbot understands → Finds data → Calculates → Shows results
+```
+
+### Step-by-Step Process
+1. **You ask a question** (like "Find cargo for vessel 9700001")
+2. **Chatbot analyzes** what you want to do
+3. **System looks up** relevant data from your files
+4. **Calculates** the best options
+5. **Shows you** the results with charts and tables
+
+## 💻 Code Logic Explained
+
+### 1. **DataLoader** (`app/data_loader.py`)
+**What it does**: Reads all your maritime data files
+
+**Simple Logic**:
+```python
+# Reads CSV files like reading a spreadsheet
+vessels = read_csv('vessels.csv')  # Ship information
+cargos = read_csv('cargos.csv')    # Cargo information  
+ports = read_csv('ports.csv')      # Port information
+```
+
+**Key Functions**:
+- `load_vessels()`: Loads ship data (IMO, type, size, etc.)
+- `load_cargos()`: Loads cargo data (what, how much, where)
+- `get_vessel_info(imo)`: Finds specific ship by IMO number
+
+### 2. **VoyagePlanner** (`app/voyage_planner.py`)
+**What it does**: Plans ship routes and calculates costs
+
+**Simple Logic**:
+```python
+# Like using Google Maps for ships
+distance = calculate_distance(from_port, to_port)
+fuel_needed = distance × fuel_consumption
+total_cost = fuel_cost + port_fees + canal_fees
+voyage_time = distance ÷ ship_speed
+```
+
+**Key Functions**:
+- `plan_voyage()`: Creates complete voyage plan
+- `compare_routes()`: Compares different route options (Suez vs Cape)
+- `optimize_speed()`: Finds best speed for maximum profit
+
+### 3. **CargoMatcher** (`app/cargo_matcher.py`)
+**What it does**: Matches ships with cargo for best profit
+
+**Simple Logic**:
+```python
+# Like a dating app for ships and cargo
+for each ship:
+    for each cargo:
+        if ship_size >= cargo_size:  # Ship can carry cargo
+            if timing_works:         # Ship available when cargo ready
+                calculate_profit = freight_revenue - voyage_costs
+                if profit > minimum:  # Profitable enough
+                    add_to_matches()
+```
+
+**Key Functions**:
+- `find_cargo_matches()`: Finds cargo for a specific ship
+- `find_vessel_matches()`: Finds ships for a specific cargo
+- `get_optimal_matches()`: Finds best ship-cargo combinations
+- `calculate_tce()`: Calculates daily profit (Time Charter Equivalent)
+
+### 4. **MarketInsights** (`app/market_insights.py`)
+**What it does**: Analyzes market trends and prices
+
+**Simple Logic**:
+```python
+# Like a financial analyst for shipping
+current_bdi = get_current_bdi()           # Baltic Dry Index
+freight_rates = calculate_rates(bdi)       # Current freight rates
+market_trend = analyze_trend(historical)   # Up or down trend
+bunker_prices = get_fuel_prices()          # Fuel costs
+```
+
+**Key Functions**:
+- `get_freight_rate_trends()`: Shows how rates are changing
+- `get_market_summary()`: Overall market picture
+- `get_bunker_price_analysis()`: Fuel price analysis
+- `benchmark_voyage_performance()`: Compare to market average
+
+### 5. **PDACalculator** (`app/pda_calculator.py`)
+**What it does**: Calculates all costs for a voyage
+
+**Simple Logic**:
+```python
+# Like a detailed invoice for shipping
+port_fees = load_port_fees + discharge_port_fees
+bunker_costs = fuel_needed × fuel_price
+canal_costs = suez_fee + panama_fee
+additional_costs = agent_fees + other_expenses
+total_pda = port_fees + bunker_costs + canal_costs + additional_costs
+```
+
+**Key Functions**:
+- `calculate_pda()`: Total cost calculation
+- `compare_bunker_ports()`: Compare fuel prices at different ports
+- `calculate_port_fees()`: Port charges calculation
+- `calculate_canal_costs()`: Canal transit fees
+
+### 6. **SimpleWorkingChatbot** (`app/simple_working_chatbot.py`)
+**What it does**: Understands your questions and gives smart answers
+
+**Simple Logic**:
+```python
+# Like a smart assistant that understands shipping language
+def handle_query(user_question):
+    intent = understand_what_user_wants(user_question)  # Voyage planning? Cargo matching?
+    data = extract_important_info(user_question)        # IMO numbers, ports, etc.
+    result = do_the_work(intent, data)                 # Call appropriate function
+    return format_nice_response(result)                # Show results nicely
+```
+
+**Key Functions**:
+- `handle_query()`: Main function that processes your questions
+- `_determine_intent()`: Figures out what you want to do
+- `_extract_data_from_query()`: Finds IMO numbers, port codes, etc.
+- `_execute_action()`: Calls the right function to get results
+
+### 7. **Main Application** (`app/main_working.py`)
+**What it does**: Connects everything together and provides web interface
+
+**Simple Logic**:
+```python
+# Like a restaurant that serves different dishes
+app = FastAPI()  # Web server
+
+@app.post("/chat")  # When someone asks a question
+def chat(request):
+    return chatbot.handle_query(request.query)  # Get answer from chatbot
+
+@app.post("/voyage/plan")  # When someone wants voyage planning
+def plan_voyage(request):
+    return voyage_planner.plan_voyage(...)  # Plan the voyage
+```
+
+### 8. **Frontend UI** (`ui.py`)
+**What it does**: Beautiful web interface for users
+
+**Simple Logic**:
+```python
+# Like a beautiful dashboard
+def main():
+    page = sidebar_navigation()  # Choose what you want to do
+    
+    if page == "Chat":
+        show_chat_interface()    # Talk to the AI
+    elif page == "Voyage Planning":
+        show_voyage_forms()      # Plan voyages
+    elif page == "Cargo Matching":
+        show_cargo_forms()       # Match ships and cargo
+    # ... more pages
+```
+
+## 📁 File Structure
+
+```
+maritime-ai-agent/
+├── 📁 app/                          # Main application code
+│   ├── 🐍 main_working.py          # Web server and API endpoints
+│   ├── 🐍 simple_working_chatbot.py # Smart chatbot that understands questions
+│   ├── 🐍 data_loader.py           # Reads your data files
+│   ├── 🐍 voyage_planner.py        # Plans ship routes and calculates costs
+│   ├── 🐍 cargo_matcher.py         # Matches ships with cargo
+│   ├── 🐍 market_insights.py       # Analyzes market trends
+│   └── 🐍 pda_calculator.py        # Calculates voyage costs
+├── 📁 data/                         # Your maritime data files
+│   ├── 📄 vessels.csv              # Ship information
+│   ├── 📄 cargos.csv               # Cargo information
+│   ├── 📄 ports.csv                # Port information
+│   ├── 📄 routes.csv               # Route data
+│   └── 📄 market.csv               # Market data
+├── 🐍 ui.py                        # Beautiful web interface
+├── 📄 requirements.txt             # Python packages needed
+└── 📄 README.md                    # This documentation
+```
+
+## 🔧 Installation & Setup
+
+### Step 1: Get the Code
+```bash
+# Download the project
+git clone <repository-url>
+cd maritime-ai-agent
+```
+
+### Step 2: Set Up Python Environment
+```bash
+# Create a virtual environment (like a clean workspace)
+python -m venv venv
+
+# Activate it (Windows)
+venv\Scripts\activate
+
+# Activate it (Mac/Linux)
+source venv/bin/activate
+```
+
+### Step 3: Install Required Packages
+```bash
+# Install all needed Python packages
+pip install -r requirements.txt
+```
+
+### Step 4: Check Your Data Files
+Make sure you have these files in the `data/` folder:
+- `vessels.csv` - Ship information
+- `cargos.csv` - Cargo information  
+- `ports.csv` - Port information
+- `routes.csv` - Route data
+- `market.csv` - Market data
+
+## 🏃‍♂️ How to Run
+
+### Method 1: Quick Start (Easiest)
+Open **two terminal windows** and run:
+
+**Terminal 1 - Start the Backend:**
+```bash
+python -m uvicorn app.main_working:app --host 0.0.0.0 --port 8000 --reload
+```
+
+**Terminal 2 - Start the Frontend:**
+```bash
+streamlit run ui.py --server.port 8502
+```
+
+**Then open your browser and go to:**
+- **Main Interface**: http://localhost:8502
+- **API Status**: http://localhost:8000/health
+
+### Method 2: Step by Step
+```bash
+# 1. Start the backend server
+python -m uvicorn app.main_working:app --reload --port 8000
+
+# 2. In a new terminal, start the frontend
+streamlit run ui.py
+
+# 3. Open browser to http://localhost:8501
+```
+
+### Method 3: Test Individual Components
+```bash
+# Test data loading
+python -c "from app.data_loader import DataLoader; dl = DataLoader(); print('Data loaded successfully!')"
+
+# Test voyage planning
+python -c "from app.voyage_planner import VoyagePlanner; vp = VoyagePlanner(); print(vp.plan_voyage('9700001', 'BRSSZ', 'CNSHA'))"
+
+# Test chatbot
+python -c "from app.simple_working_chatbot import SimpleWorkingChatbot; cb = SimpleWorkingChatbot(); print(cb.handle_query('Plan voyage for vessel 9700001'))"
+```
+
+## 💡 Usage Examples
+
+### 🗺️ Voyage Planning
+**What you ask**: "Plan voyage for vessel 9700001 from BRSSZ to CNSHA"
+
+**What happens**:
+1. Chatbot understands you want voyage planning
+2. Extracts vessel IMO (9700001), load port (BRSSZ), discharge port (CNSHA)
+3. VoyagePlanner calculates:
+   - Distance between ports
+   - Fuel consumption and costs
+   - Port fees
+   - Total voyage time
+   - ETA (Estimated Time of Arrival)
+4. Shows you a complete voyage plan with costs
+
+### 📦 Cargo Matching
+**What you ask**: "Find vessels for cargo CARG-001"
+
+**What happens**:
+1. Chatbot understands you want vessel matching
+2. Extracts cargo ID (CARG-001)
+3. CargoMatcher finds all suitable vessels by:
+   - Checking if vessel can carry cargo size
+   - Checking if timing works (laycan)
+   - Calculating profitability (TCE)
+4. Shows you ranked list of best vessel options
+
+### 📊 Market Analysis
+**What you ask**: "Market analysis for Capesize"
+
+**What happens**:
+1. Chatbot understands you want market analysis
+2. Extracts vessel type (Capesize)
+3. MarketInsights analyzes:
+   - Current freight rates
+   - Market trends
+   - Bunker prices
+   - Market sentiment
+4. Shows you market summary with charts
+
+### 💰 Cost Calculation
+**What you ask**: "Calculate PDA for vessel 9700001 from BRSSZ to CNSHA"
+
+**What happens**:
+1. Chatbot understands you want cost calculation
+2. Extracts vessel and port information
+3. PDACalculator computes:
+   - Port fees (load and discharge)
+   - Bunker costs
+   - Canal fees (if applicable)
+   - Additional costs
+4. Shows you detailed cost breakdown
+
+## 🛠️ Troubleshooting
+
+### Common Problems and Solutions
+
+#### 1. "Port already in use" Error
+**Problem**: Port 8000 or 8501 is already being used
+**Solution**:
+```bash
+# Find what's using the port
+netstat -ano | findstr :8000
+
+# Kill the process
+taskkill /PID <PID> /F
+
+# Or use different ports
+python -m uvicorn app.main_working:app --port 8001
+streamlit run ui.py --server.port 8503
+```
+
+#### 2. "Module not found" Error
+**Problem**: Python can't find the app modules
+**Solution**:
+```bash
+# Make sure you're in the right directory
+cd maritime-ai-agent
+
+# Make sure virtual environment is activated
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Mac/Linux
+```
+
+#### 3. "File not found" Error
+**Problem**: Data files are missing
+**Solution**:
+```bash
+# Check if data files exist
+ls data/
+
+# Make sure you have:
+# - vessels.csv
+# - cargos.csv  
+# - ports.csv
+# - routes.csv
+# - market.csv
+```
+
+#### 4. "Connection refused" Error
+**Problem**: Frontend can't connect to backend
+**Solution**:
+```bash
+# Check if backend is running
+curl http://localhost:8000/health
+
+# If not running, start it:
+python -m uvicorn app.main_working:app --reload
+```
+
+### Debug Mode
+To see what's happening behind the scenes:
+
+```python
+# Add this to main_working.py for detailed logging
+import logging
+logging.basicConfig(level=logging.DEBUG)
+```
+
+### Test Everything Works
+```bash
+# Test all components
+python -c "
+from app.data_loader import DataLoader
+from app.voyage_planner import VoyagePlanner
+from app.cargo_matcher import CargoMatcher
+from app.simple_working_chatbot import SimpleWorkingChatbot
+
+print('✅ All modules imported successfully!')
+print('✅ System is ready to use!')
+"
+```
+
+## 🎯 What Each File Does (Simple Summary)
+
+| File | What It Does | Simple Explanation |
+|------|-------------|-------------------|
+| `main_working.py` | Web server | Like a restaurant that serves different dishes |
+| `simple_working_chatbot.py` | Smart assistant | Understands your questions and gives answers |
+| `data_loader.py` | Data reader | Reads your CSV files like reading a spreadsheet |
+| `voyage_planner.py` | Route planner | Like Google Maps for ships |
+| `cargo_matcher.py` | Matchmaker | Like a dating app for ships and cargo |
+| `market_insights.py` | Market analyst | Like a financial analyst for shipping |
+| `pda_calculator.py` | Cost calculator | Like a detailed invoice for shipping |
+| `ui.py` | Web interface | Beautiful dashboard for users |
+
+## 🚀 Quick Start Checklist
+
+- [ ] Download the code
+- [ ] Create virtual environment
+- [ ] Install requirements
+- [ ] Check data files exist
+- [ ] Start backend: `python -m uvicorn app.main_working:app --reload`
+- [ ] Start frontend: `streamlit run ui.py`
+- [ ] Open browser to http://localhost:8501
+- [ ] Try asking: "Plan voyage for vessel 9700001 from BRSSZ to CNSHA"
+
+---
+
+**🚢 Happy Sailing with Maritime AI Agent! 🚢**
